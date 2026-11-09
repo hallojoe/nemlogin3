@@ -2,13 +2,13 @@
 
 ## 1. Vælg testorganisation efter opgaven
 
-Hvem udbyder it-systemet, og hvem skal logge ind i det? I DevTest4 kan de to organisationer have hver sit fiktive CVR-nummer. Begge formularer opretter en organisation og et administratorlogin. Tabellen viser, hvor du begynder.
+Hvem udbyder it-systemet, og hvem skal logge ind i det? I DevTest4 kan de to organisationer have hver sit fiktive CVR-nummer. Ved projektets oprettelse af en BO og en TU oprettede portalen automatisk en testbruger for hver organisation. Brugeren fra hver kvittering kunne både logge ind som privatperson og repræsentere sin egen organisation. Tabellen viser, hvor du begynder.
 
 | Det vil du teste | Vælg | Hvad gør du bagefter? |
 | --- | --- | --- |
 | Dit eget it-system skal bruge NemLog-in til login. | [TU – tjenesteudbyder](https://testportal.test-devtest4-nemlog-in.dk/TU) | Registrér it-systemet i NemLog-in Administration. TU giver også adgang til MitID Erhverv, så du kan oprette testmedarbejdere i udbyderens egen organisation. |
-| En medarbejder skal logge ind på vegne af sin organisation i et allerede tilsluttet it-system. | [BO – brugerorganisation](https://testportal.test-devtest4-nemlog-in.dk/BO) | Opret og aktivér medarbejderen i MitID Erhverv. Du kan også afprøve brugeradministration og certifikater. |
-| En kunde skal bruge din løsning, fx en kommune, der logger ind hos en privat udbyder. | TU til udbyderen og BO til kunden | Registrér løsningen under TU. Opret medarbejderen under BO. Ved erhvervslogin skal løsningen vise kundens CVR-nummer. |
+| En medarbejder skal logge ind på vegne af sin organisation i et allerede tilsluttet it-system. | [BO – brugerorganisation](https://testportal.test-devtest4-nemlog-in.dk/BO) | Start med brugeren fra BO-kvitteringen. Opret en ekstra medarbejder i MitID Erhverv, hvis du vil teste andre rettigheder. |
+| En kunde skal bruge din løsning, fx en kommune, der logger ind hos en privat udbyder. | TU til udbyderen og BO til kunden | Registrér løsningen under TU. Log ind med brugeren fra kundens BO-kvittering. Ved erhvervslogin skal løsningen vise kundens CVR-nummer. |
 
 **Privat eller offentlig** beskriver den organisation, du opretter. På TU vælger du typen for udbyderen, på BO for den organisation, medarbejderen repræsenterer. Samme person kan derfor godt teste både privatlogin som borger og erhvervslogin for en offentlig organisation.
 
@@ -66,13 +66,40 @@ En privat it-leverandør, som integrerer **kommunens** system, kan fx afprøve l
 1. Udfyld den valgte formular, og tryk **Opret**. Gem det tildelte CVR-nummer og administratorens bruger-ID fra kvitteringssiden. Opbevar adgangskoden og en eventuel API-nøgle i en adgangskodeadministrator.
 2. Kontrollér kvitteringsmailen. Den indeholder bruger-ID og miljølink. Brug den adgangskode, du selv valgte.
 3. **TU:** Hvis du valgte tjenesteudbyderrollen, skal du kunne logge ind i NemLog-in Administration og påbegynde registrering af dit it-system. Registreringen er næste trin, hvis du vil afprøve login i din egen løsning. [Opret it-systemet i DevTest4](https://www.nemlog-in.dk/om-nemlog-in/miljoer-i-nemlog-in/devtest4-miljoet-tekniske-oplysninger/nyt-it-system-oprettes-i-devtest4-pre-produktionsmiljoet/)
-4. **BO eller TU med egne medarbejdere:** Åbn MitID Erhverv, vælg **Test login**, og log ind som administrator. Kontrollér, at organisationens CVR-nummer matcher kvitteringen. Fortsæt med trin 2 for at oprette testpersonen. Guidens loginprøver bruger [MitID Erhverv på DevTest4-integrationstestbenet](https://erhvervsadministration.test-devtest4-nemlog-in.dk/).
+4. **BO eller TU med egne medarbejdere:** Åbn MitID Erhverv, vælg **Test login**, og log ind som administrator. Kontrollér, at organisationens CVR-nummer matcher kvitteringen. Brug samme login til prøverne i trin 2. Guidens loginprøver bruger [MitID Erhverv på DevTest4-integrationstestbenet](https://erhvervsadministration.test-devtest4-nemlog-in.dk/).
 
 [NemLog-ins BO-vejledning](https://www.nemlog-in.dk/om-nemlog-in/miljoer-i-nemlog-in/devtest4-miljoet-tekniske-oplysninger/fiktivt-cvr-nummer-opret-en-brugerorganisation-til-test-devtest4/)
 
-## 2. Giv en testperson adgang som både privatperson og medarbejder
+### Sådan læser du TU-kvitteringen
 
-Administratorens login fra trin 1 bruges til opsætningen. Opret en testperson til selve loginprøven.
+Eksemplet nedenfor bygger på projektets kvittering for en offentlig TU. Feltnavnene og de valgte organisationstyper er gengivet fra kvitteringen. Identifikatorer og loginoplysninger er erstattet af pladsholdere.
+
+| Felt på kvitteringen | Eksempel eller anvendelse |
+| --- | --- |
+| Organisationsnavn og CVR-nummer | `Testorganisation nr. <test-CVR>`. Brug kvitteringens CVR-nummer til at kontrollere, hvilken organisation brugeren repræsenterer. |
+| Brugernavn og Password | Brug `<testbruger>` og din valgte adgangskode under **Test login**. |
+| Fornavn og Efternavn | Den automatisk oprettede testpersons navn. |
+| RID | Brugerens identifikator i organisationen. Feltet **Brugernavn** er det, du indtaster ved login. |
+| API-adgangsnøgle | Feltet var tomt i eksemplet. |
+| Organisationstype og CSS Organisationstype(r) | På kvitteringen stod **Offentlig virksomhed** og **Tjenesteudbyder**. Det første er typen af organisation, det andet er dens rolle. |
+| EIA og EIA Integrationtest | Links til MitID Erhverv. Brug **EIA Integrationtest** til erhvervsadministrationen på guidens integrationstestben. |
+| MitID simulator | Link til simulatoren, fx hvis du senere vil oprette en ekstra testperson. |
+| Administrationen | Et separat link på TU-kvitteringen. Følg TU-vejledningen ovenfor, når du vil registrere it-systemet. |
+
+## 2. Afprøv den automatisk oprettede bruger
+
+Start fra et tilsluttet it-system på DevTest4-integrationstestbenet, der understøtter både privat- og erhvervslogin. Brug **samme brugernavn og adgangskode fra én kvittering** i de to prøver.
+
+| Prøve | Handling | Bestået når |
+| --- | --- | --- |
+| Privatlogin | Vælg **Test login**, log ind med kvitteringens bruger, og fortsæt som privatperson. | It-systemet viser testpersonen i privat kontekst. |
+| Organisationslogin | Start en ny browsersession, log ind med samme bruger, og fortsæt på vegne af organisationen. | It-systemet viser organisationen med CVR-nummeret fra den samme kvittering. |
+
+Har du oprettet både BO og TU, kan du gentage de to prøver med den anden kvittering. Når du tester en kunde i din TU’s løsning, bruger du BO-brugeren og sammenholder resultatet med **BO’ens CVR-nummer**. Hvis en loginmulighed mangler, kontrollér først, hvilke loginformer it-systemet understøtter, og at du er på det rigtige DevTest4-ben. [Tekniske oplysninger om DevTest4](https://www.nemlog-in.dk/om-nemlog-in/miljoer-i-nemlog-in/devtest4-miljoet-tekniske-oplysninger/)
+
+## 3. Opret en ekstra testperson efter behov
+
+Brug denne fremgangsmåde, hvis du vil teste en anden medarbejder, særskilte rettigheder eller samme person i flere organisationer.
 
 1. Åbn [MitID Simulator](https://mitidsimulator.test-devtest4-nemlog-in.dk/). Vælg **Create identity**, brug fiktive personoplysninger med test-CPR, og markér **Private MitID**. Gem testpersonens bruger-ID og adgangskode.
 2. Log ind som administrator i MitID Erhverv på integrationstestbenet. Under **Indstillinger → Identifikationsmidler** skal organisationen tillade brug af privat MitID.
@@ -82,17 +109,3 @@ Administratorens login fra trin 1 bruges til opsætningen. Opret en testperson t
 Skal samme person teste begge organisationstyper, gentager du erhvervsoprettelsen og aktiveringen for den anden organisation med samme testperson. Erhvervsbrugeren skal oprettes på det DevTest4-ben, hvor it-systemet testes.
 
 [Kilde: NemLog-ins vejledning til oprettelse og aktivering af erhvervsbrugere](https://www.nemlog-in.dk/om-nemlog-in/miljoer-i-nemlog-in/devtest4-miljoet-tekniske-oplysninger/opret-mitid-erhverv-brugere-til-test-i-devtest4-miljoet/)
-
-## 3. Afprøv login i et tilsluttet it-system
-
-Disse prøver kræver et it-system på DevTest4-integrationstestbenet, der understøtter de relevante loginformer. Start hver prøve fra systemets login i en ny browsersession, og brug testpersonens identitet.
-
-| Prøve | Handling | Bestået når |
-| --- | --- | --- |
-| Privatperson | Log ind som dig selv. | Systemet viser testpersonen i privat kontekst. |
-| Privat virksomhed | Log ind på vegne af den private testorganisation. | Systemet viser organisationen med det fiktive CVR-nummer fra trin 1. |
-| Offentlig virksomhed | Log ind på vegne af den offentlige testorganisation. | Systemet viser den offentlige organisations eget fiktive CVR-nummer. |
-
-Hvis den forventede organisation mangler, kontrollér først brugerens aktiveringskvittering og derefter, at it-systemet og erhvervsbrugeren er på samme ben. Notér dato, organisationstype og udfald for hver prøve, når den er gennemført.
-
-[Kilde: Tekniske oplysninger om DevTest4 og miljøets to ben](https://www.nemlog-in.dk/om-nemlog-in/miljoer-i-nemlog-in/devtest4-miljoet-tekniske-oplysninger/)
