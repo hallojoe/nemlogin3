@@ -23,7 +23,22 @@ Hvem udbyder it-systemet, og hvem skal logge ind i det? I DevTest4 kan de to org
 | Organisationstype | **Privat virksomhed** findes på begge formularer. Den offentlige type hedder **Offentlig organisation** på TU og **Offentlig virksomhed** på BO. |
 | Sikringsniveau for identifikationsproces | Gælder organisationens identifikation af erhvervsbrugere ved oprettelse. Vælg efter den proces, du vil afprøve, som beskrevet nedenfor. |
 
-**Hvilket sikringsniveau?** Til guidens første loginprøve anbefaler NemLog-in **Betydelig** som udgangspunkt. It-systemets krav til et login fastlægges separat.
+### Hvornår skal du vælge kvalificerede certifikater?
+
+Lad feltet stå tomt til guidens loginprøve. Her skal løsningen vise, hvem der er logget ind, og hvilken organisation personen repræsenterer. Sæt kryds, hvis en del af testen er, at en medarbejder skal underskrive et dokument med en kvalificeret signatur, eller at en organisation skal sætte et kvalificeret elektronisk segl. Sæt krydset på den testorganisation, hvis medarbejder skal underskrive, eller hvis segl skal fremgå af dokumentet.
+
+Et certifikat forbinder en identitet med en offentlig nøgle. Modtageren kan bruge nøglen til at kontrollere en signatur eller et segl. **Kvalificeret** betyder, at en kvalificeret tillidstjenesteudbyder har udstedt certifikatet efter eIDAS-kravene. En kvalificeret signatur eller et kvalificeret segl kræver også, at selve signeringen eller forseglingen sker med et kvalificeret signatur- eller seglgenereringssystem. [eIDAS, artikel 3, 25 og 35](https://eur-lex.europa.eu/eli/reg/2014/910/2024-10-18/dan)
+
+| Situation | Hvad bruger du? | Hvad kan modtageren kontrollere? |
+| --- | --- | --- |
+| En medarbejder underskriver en aftale på vegne af virksomheden. | Et kvalificeret brugercertifikat til elektronisk signatur. | Hvilken person der underskrev, og om det underskrevne indhold er ændret. En kvalificeret elektronisk signatur har efter eIDAS samme retsvirkning som personens håndskrevne underskrift. |
+| En kommune udsteder en kvittering med kommunen som afsender. | Et kvalificeret certifikat til organisationens elektroniske segl. | At kvitteringen stammer fra kommunen, og at indholdet er intakt. Det er kommunen, der står som afsender. |
+
+**Prøv det i DevTest4.** Brug en løsning med signering eller segldannelse på testbenet. Underskriv eller forsegl et testdokument, og validér det i testmiljøet. Kontrollér, at resultatet viser den forventede person eller organisation, den forventede signatur- eller segltype og intakt indhold. Afkrydsningen på TU eller BO er et tilvalg ved oprettelsen. NSIS-feltet nedenfor styrer særskilt, hvordan organisationen identificerer erhvervsbrugere. [MitID Erhvervs vilkår, bilag 4 og 5](https://www.mitid-erhverv.dk/om-mitid-erhverv/vilkar/) · [Funktioner i DevTest4](https://www.nemlog-in.dk/om-nemlog-in/miljoer-i-nemlog-in/)
+
+### Sikringsniveau for identifikationsprocessen
+
+Til guidens første loginprøve anbefaler NemLog-in **Betydelig** som udgangspunkt. It-systemets krav til et login fastlægges separat.
 
 | Valg i formularen | Betydning for testen |
 | --- | --- |
