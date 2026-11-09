@@ -1,18 +1,59 @@
 # Fra tomt DevTest4-miljø til første testlogin
 
-Målet er at teste samme fiktive person i to situationer. Først logger personen ind som privatperson. Derefter handler personen på vegne af en testorganisation. Guiden bruger **integrationstestbenet i DevTest4** hele vejen.
+## 1. Vælg testorganisation efter opgaven
 
-## 1. Opret en brugerorganisation
+Hvem udbyder it-systemet, og hvem skal logge ind i det? I DevTest4 kan de to organisationer have hver sit fiktive CVR-nummer. Begge formularer opretter en organisation og et administratorlogin. Tabellen viser, hvor du begynder.
 
-1. Åbn [DevTest4-testportalen for brugerorganisationer](https://testportal.test-devtest4-nemlog-in.dk/BO).
-2. Angiv en administratormail, du kan læse, og vælg en testadgangskode. En særskilt API-adgangsnøgle kan beskytte organisationen mod ændringer via API'et.
-3. Vælg **Privat virksomhed** eller **Offentlig virksomhed** efter det scenarie, du vil teste. Skal begge typer afprøves, opretter du én organisation af hver type.
-4. Vælg sikringsniveau. NemLog-in anbefaler **Betydelig** som udgangspunkt. Tilvælg kvalificerede certifikater, hvis de indgår i testen.
-5. Tryk **Opret**. Gem det fiktive CVR-nummer og administratorens bruger-ID fra kvitteringssiden. Opbevar koder og eventuelle API-nøgler i en adgangskodeadministrator.
+| Det vil du teste | Vælg | Hvad gør du bagefter? |
+| --- | --- | --- |
+| Dit eget it-system skal bruge NemLog-in til login. | [TU – tjenesteudbyder](https://testportal.test-devtest4-nemlog-in.dk/TU) | Registrér it-systemet i NemLog-in Administration. TU giver også adgang til MitID Erhverv, så du kan oprette testmedarbejdere i udbyderens egen organisation. |
+| En medarbejder skal logge ind på vegne af sin organisation i et allerede tilsluttet it-system. | [BO – brugerorganisation](https://testportal.test-devtest4-nemlog-in.dk/BO) | Opret og aktivér medarbejderen i MitID Erhverv. Du kan også afprøve brugeradministration og certifikater. |
+| En kunde skal bruge din løsning, fx en kommune, der logger ind hos en privat udbyder. | TU til udbyderen og BO til kunden | Registrér løsningen under TU. Opret medarbejderen under BO. Ved erhvervslogin skal løsningen vise kundens CVR-nummer. |
 
-**Sådan tester du oprettelsen.** Kontrollér, at kvitteringsmailen til administratoren indeholder bruger-ID og et link til miljøet. Åbn derefter [MitID Erhverv på integrationstestbenet](https://erhvervsadministration.test-devtest4-nemlog-in.dk/), vælg **Test login**, og brug ID'et fra kvitteringen sammen med den adgangskode, du selv valgte. Kontrollér, at du kan åbne den forventede organisation.
+**Privat eller offentlig** beskriver den organisation, du opretter. På TU vælger du typen for udbyderen, på BO for den organisation, medarbejderen repræsenterer. Samme person kan derfor godt teste både privatlogin som borger og erhvervslogin for en offentlig organisation.
 
-[Kilde: NemLog-ins vejledning til en testorganisation med fiktivt CVR-nummer](https://www.nemlog-in.dk/om-nemlog-in/miljoer-i-nemlog-in/devtest4-miljoet-tekniske-oplysninger/fiktivt-cvr-nummer-opret-en-brugerorganisation-til-test-devtest4/)
+### Felter på både TU og BO
+
+| Felt | Hvad skal du vælge? |
+| --- | --- |
+| Administratorens e-mailadresse | Brug en postkasse, du kan åbne. Her modtager du administratorens bruger-ID og linket til miljøet. |
+| Password | Vælg en adgangskode til administratorens testlogin, og gem den ved oprettelsen. |
+| API-adgangsnøgle | Valgfri. Angiv en separat nøgle for at beskytte organisationen mod ændringer via API'et. Ved efterfølgende API-kald sender du nøglen i HTTP-headeren `X-API-HEADER`. |
+| Kvalificerede certifikater | Sæt kryds, hvis testen omfatter kvalificerede bruger- eller organisationscertifikater i MitID Erhverv. Til en almindelig loginprøve kan feltet stå tomt. |
+| Organisationstype | **Privat virksomhed** findes på begge formularer. Den offentlige type hedder **Offentlig organisation** på TU og **Offentlig virksomhed** på BO. |
+| Sikringsniveau for identifikationsproces | Gælder organisationens identifikation af erhvervsbrugere ved oprettelse. Vælg efter den proces, du vil afprøve, som beskrevet nedenfor. |
+
+**Hvilket sikringsniveau?** Til guidens første loginprøve anbefaler NemLog-in **Betydelig** som udgangspunkt. It-systemets krav til et login fastlægges separat.
+
+| Valg i formularen | Betydning for testen |
+| --- | --- |
+| Intet | Organisationen angiver intet NSIS-niveau for identifikationsprocessen. |
+| Betydelig | Organisationsadministratoren kan give en identitetsadministrator lov til at oprette erhvervsbrugere direkte på niveau Betydelig. |
+| Høj | Brug dette til at teste oprettelse direkte på niveau Høj. Også her skal organisationsadministratoren give identitetsadministratoren den relevante tilladelse. |
+
+### Ekstra valg på TU
+
+**Organisationsrolle(r)** angiver, hvem der har ansvaret for it-systemet. Vælg **Tjenesteudbyder**, når organisationen udbyder sit eget system. Vælg **IT leverandør**, når den udfører den tekniske integration for en anden udbyder. Vælg **Tjenesteudbyder og IT leverandør**, når du skal teste begge roller.
+
+**Tillad myndighedsudøvelse** vises, når du vælger **Privat virksomhed** og en rolle, der omfatter **Tjenesteudbyder**. Vælg den situation, som den private udbyder skal repræsentere i testen.
+
+| Valg i formularen | Testscenarie |
+| --- | --- |
+| Nej | En privat udbyder tilbyder sin egen tjeneste uden myndighedsudøvelse. |
+| Ja, offentligtretligt organ | Organisationen testes i egenskab af offentligretligt organ. |
+| Ja, leverandør til det offentlige | Organisationen testes som leverandør, der udfører en myndighedsopgave for det offentlige. |
+| Ja, broker til det offentlige | Organisationen testes som broker for det offentlige. |
+
+En privat it-leverandør, som integrerer **kommunens** system, kan fx afprøve leverandørrollen. Hvis **leverandøren selv** er tjenesteudbyder for en løsning med en myndighedsopgave, er myndighedsvalget relevant. For en privat tjenesteudbyder beskriver NemLog-in adgang til login, STS og signering. [NemLog-ins TU-vejledning](https://www.nemlog-in.dk/om-nemlog-in/miljoer-i-nemlog-in/devtest4-miljoet-tekniske-oplysninger/fiktivt-cvr-nummer-opret-en-it-systemudbyder-til-test-devtest4/)
+
+### Opret og kontrollér organisationen
+
+1. Udfyld den valgte formular, og tryk **Opret**. Gem det tildelte CVR-nummer og administratorens bruger-ID fra kvitteringssiden. Opbevar adgangskoden og en eventuel API-nøgle i en adgangskodeadministrator.
+2. Kontrollér kvitteringsmailen. Den indeholder bruger-ID og miljølink. Brug den adgangskode, du selv valgte.
+3. **TU:** Hvis du valgte tjenesteudbyderrollen, skal du kunne logge ind i NemLog-in Administration og påbegynde registrering af dit it-system. Registreringen er næste trin, hvis du vil afprøve login i din egen løsning. [Opret it-systemet i DevTest4](https://www.nemlog-in.dk/om-nemlog-in/miljoer-i-nemlog-in/devtest4-miljoet-tekniske-oplysninger/nyt-it-system-oprettes-i-devtest4-pre-produktionsmiljoet/)
+4. **BO eller TU med egne medarbejdere:** Åbn MitID Erhverv, vælg **Test login**, og log ind som administrator. Kontrollér, at organisationens CVR-nummer matcher kvitteringen. Fortsæt med trin 2 for at oprette testpersonen. Guidens loginprøver bruger [MitID Erhverv på DevTest4-integrationstestbenet](https://erhvervsadministration.test-devtest4-nemlog-in.dk/).
+
+[NemLog-ins BO-vejledning](https://www.nemlog-in.dk/om-nemlog-in/miljoer-i-nemlog-in/devtest4-miljoet-tekniske-oplysninger/fiktivt-cvr-nummer-opret-en-brugerorganisation-til-test-devtest4/)
 
 ## 2. Giv en testperson adgang som både privatperson og medarbejder
 
