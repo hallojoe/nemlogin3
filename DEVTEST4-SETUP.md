@@ -63,6 +63,10 @@ En privat it-leverandør, som integrerer **kommunens** system, kan fx afprøve l
 
 ### Opret og kontrollér organisationen
 
+| Offentlig TU | Privat BO | Privat TU |
+| --- | --- | --- |
+| ![Formular for Offentlig TU](docs/billeder/tu-offentlig-formular.jpg) | ![Formular for Privat BO](docs/billeder/bo-virksomhed-formular.jpg) | ![Formular for Privat TU](docs/billeder/tu-virksomhed-formular.jpg) |
+
 1. Udfyld den valgte formular, og tryk **Opret**. Gem det tildelte CVR-nummer og administratorens bruger-ID fra kvitteringssiden. Opbevar adgangskoden og en eventuel API-nøgle i en adgangskodeadministrator.
 2. Kontrollér kvitteringsmailen. Den indeholder bruger-ID og miljølink. Brug den adgangskode, du selv valgte.
 3. **Kontrollér organisationens CVR-nummer.** Åbn MitID Erhverv, vælg **Test login**, og log ind som administrator. Kontrollér, at organisationens CVR-nummer matcher kvitteringen. Guidens loginprøver bruger [MitID Erhverv på DevTest4-integrationstestbenet](https://erhvervsadministration.test-devtest4-nemlog-in.dk/).
@@ -71,7 +75,11 @@ En privat it-leverandør, som integrerer **kommunens** system, kan fx afprøve l
 
 ### Sådan læser du TU-kvitteringen
 
-Eksemplet nedenfor bygger på projektets kvittering for en offentlig TU. Feltnavnene og de valgte organisationstyper er gengivet fra kvitteringen. Identifikatorer og loginoplysninger er erstattet af pladsholdere.
+Her er kvitteringerne fra de tre oprettelser i DevTest4. Brug CVR-nummeret og brugernavnet fra den organisation, du tester med. Tabellen under billederne forklarer felterne på den offentlige TU-kvittering.
+
+| Offentlig TU | Privat BO | Privat TU |
+| --- | --- | --- |
+| ![Kvittering for Offentlig TU](docs/billeder/tu-offentlig-kvittering.jpg) | ![Kvittering for Privat BO](docs/billeder/bo-virksomhed-kvittering.jpg) | ![Kvittering for Privat TU](docs/billeder/tu-virksomhed-kvittering.jpg) |
 
 | Felt på kvitteringen | Eksempel eller anvendelse |
 | --- | --- |
